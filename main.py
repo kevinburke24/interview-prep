@@ -1,30 +1,25 @@
-records = [
-    {"name": "Alice", "city": "Boston", "score": 92},
-    {"name": "Bob", "city": "NYC", "score": 85},
-    {"name": "Charlie", "city": "Boston", "score": 78},
-]
+import csv
+def read_stream_from_csv(path):
+    with open(path, "") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            yield row
 
-# Generate a new dictionary that returns all the names
-# associated with each city.
-
-# I am going to loop through list, checking if the city
-# already exists in the output dictionary that we are building.
-# If the city already exists in our output dict, append name.
-# If it doesn't, add a new city, list entry to the output
-# dictionarty
-
-def create_city_dict(records):
-    out = {}
+def group_cities_from_records(records):
+    cities = {}
     for record in records:
         city = record["city"]
-        if city in out:
-            out[city].append(record["name"])
-        else:
-            out[city] = [ record["name"] ]
-    return out
+        name = record["name"]
+        if city is None or name is None:
+            continue
+
+        if city not in cities:
+            cities[city] = []
+        cities[city].append(name)
+    for city in cities:
+        cities[city].sort()
+    return cities
 
 if __name__ == "__main__":
-    out = create_city_dict(records)
-    for k,v in out.items():
-        print(k)
-        print(v)
+    records = [ { "name" : "Theodore", "city" : "Boston", "score" : 4 }, {"name" : "Kevin", "city" : "NYC", "score" : 5}, {"name" : "Al", "city" : "NYC", "score" : 5} ]
+    print(group_cities_from_records(records))
