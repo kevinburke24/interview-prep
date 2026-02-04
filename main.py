@@ -1,4 +1,6 @@
 import csv
+from app import app
+
 def read_stream_from_csv(path):
     with open(path, "") as f:
         reader = csv.DictReader(f)
